@@ -1,10 +1,10 @@
 <script setup>
-import { onMounted } from "vue";
+import mulltiSlider from "multi-range-slider-vue";
 
 // const categories = ref(["shoes", "T-shirt", "cloth", "Jeans"]);
 const cat = ref("");
 
-const limit = ref(5);
+const limit = ref(10);
 
 const {
   data: products,
@@ -17,7 +17,7 @@ const {
     $fetch(
       `https://fakestoreapi.com/products${
         cat.value ? "/category/" + cat.value : ""
-      }${"?limit=" + limit.value}`
+      }${"?offset=" + limit.value}`
     ),
   {
     watch: [cat],
@@ -58,8 +58,16 @@ const {
           </ul>
           <div>
             <h3 class="title-name">Prices</h3>
+            <mulltiSlider
+              :max="100"
+              style="
+                background-color: white;
+                box-shadow: none;
+                border: none;
+              "></mulltiSlider>
           </div>
         </div>
+        <slider></slider>
       </aside>
 
       <main
@@ -75,6 +83,9 @@ const {
           :price="product?.price"></product>
       </main>
     </div>
+    <pagination
+      :dataPerPage="5"
+      :totalData="50"></pagination>
   </div>
 </template>
 
@@ -96,6 +107,7 @@ const {
   padding: 1rem;
   position: sticky;
   top: 2rem;
+  overflow-y: auto;
 }
 
 .index-page {

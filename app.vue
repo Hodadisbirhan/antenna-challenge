@@ -1,3 +1,8 @@
+<script setup>
+useHead({
+  title: "Antenna-Challeng",
+});
+</script>
 <template>
   <div>
     <NuxtLayout>
