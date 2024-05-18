@@ -8,6 +8,5 @@
 <style>
 .screen {
   max-width: 1920px;
-  padding: 3rem;
 }
 </style>

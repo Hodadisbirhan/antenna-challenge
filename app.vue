@@ -15,5 +15,7 @@
 }
 body {
   background-color: whitesmoke;
+  display: flex;
+  justify-items: center;
 }
 </style>
