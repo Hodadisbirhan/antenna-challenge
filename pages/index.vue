@@ -72,7 +72,9 @@ const select_category = (item) => {
 
 <template>
   <div class="index-page">
-    <div class="banner"></div>
+    <div class="banner">
+      <h3 class="">Enjoy This E-commerce</h3>
+    </div>
     <div class="page">
       <aside class="filter">
         <div>
@@ -175,11 +177,20 @@ const select_category = (item) => {
   background-color: blueviolet;
   height: 10rem;
   margin-bottom: 1rem;
+  margin-top: 3rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .drop_down {
   width: 100%;
   margin-bottom: 2rem;
+}
+
+.banner h3 {
+  font-size: xx-large;
+  font-weight: bolder;
+  color: white;
 }
 
 @media only screen and (max-width: 300px) {
