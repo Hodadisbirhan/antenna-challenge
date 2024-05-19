@@ -26,10 +26,8 @@ const props = defineProps({
 const store = useCartStore();
 
 const addToCart = (id) => {
-  store?.updateCartQuantity(id, 1);
+  store?.incrementCartQuantity(id, 1);
 };
-
-console.log(store);
 </script>
 
 <template>

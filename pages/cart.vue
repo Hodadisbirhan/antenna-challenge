@@ -1,8 +1,11 @@
 <script setup>
+import { useCartStore } from "~/store/useCartStore";
+const router = useRouter();
+const store = useCartStore();
 const {
   data: products,
-  pending,
-  error,
+  pending: is_loading,
+  error: is_error,
   refresh,
 } = await useAsyncData(
   "carts",
@@ -11,6 +14,22 @@ const {
     lazy: true,
   }
 );
+
+const cart_product_ids = computed(() => {
+  return store?.cart.map((element) => {
+    return element?.id;
+  });
+});
+
+const cart_products = computed(() => {
+  return products.value?.filter((element) => {
+    return cart_product_ids.value?.includes(element?.id);
+  });
+});
+
+const backHome = () => {
+  router.push("/");
+};
 </script>
 
 <template>
@@ -22,36 +41,14 @@ const {
         class="cart-list-wrapper"
         v-if="products">
         <li
-          v-for="product in products"
+          v-for="product in cart_products"
           :key="product.id">
-          <div class="img-name">
-            <div class="img-container">
-              <NuxtImg
-                class="img"
-                :src="product.image"
-                alt=""></NuxtImg>
-            </div>
-            <div class="name">
-              <h5>{{ product.title }}</h5>
-              <span>{{ product.category }}</span>
-            </div>
-          </div>
-          <div class="add-cart-value">
-            <select>
-              <option
-                v-for="i in 10"
-                :key="i"
-                :value="i">
-                {{ i }}
-              </option>
-            </select>
-            <div class="price">
-              <h5>$1400</h5>
-              <span>$393/per item</span>
-            </div>
-          </div>
-
-          <button class="btn">Remove</button>
+          <cart
+            :id="product?.id"
+            :image="product?.image"
+            :category="product?.category"
+            :title="product?.title"
+            :price="product?.price"></cart>
         </li>
       </ul>
     </section>
@@ -86,7 +83,11 @@ const {
         </div>
 
         <button class="checkout-btn">Check out</button>
-        <button class="back-to-btn">back to shop</button>
+        <button
+          class="back-to-btn"
+          @click="backHome">
+          back to shop
+        </button>
       </div>
     </section>
   </div>
@@ -141,79 +142,6 @@ const {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-}
-
-.img-container {
-  width: 2rem;
-  height: 2.5rem;
-}
-
-.img {
-  object-fit: contain;
-  object-position: center;
-  width: 2rem;
-  height: 2.5rem;
-}
-
-.img-name {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-items: center;
-  gap: 0.3rem;
-}
-
-.name {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-.name h5 {
-  font-size: 0.6rem;
-  width: 10rem;
-  font-weight: 500;
-  color: darkgray;
-}
-.name span {
-  font-size: 0.5rem;
-  font-weight: 600;
-  color: rgb(189, 205, 209);
-}
-.add-cart-value {
-  display: flex;
-  flex-direction: row;
-  gap: 0.6rem;
-  align-items: center;
-}
-.add-cart-value select {
-  outline: none;
-  border: 0.08rem solid rgb(135, 97, 218);
-  border-radius: 0.2rem;
-  padding: 0.15rem 0.4rem;
-  background-color: whitesmoke;
-}
-.add-cart-value h5 {
-  font-size: 0.8rem;
-}
-.add-cart-value span {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: rgb(189, 205, 209);
-}
-
-.btn {
-  font-size: 0.6rem;
-  font-weight: 600;
-  padding: 0.4rem 0.9rem;
-  color: rgb(135, 97, 218);
-  border: 0.08rem solid rgb(135, 97, 218);
-  border-radius: 0.2rem;
-  cursor: pointer;
-}
-
-.btn:hover {
-  color: white;
-  background-color: rgb(135, 97, 218);
 }
 
 .input-wrapper {
@@ -280,6 +208,7 @@ const {
   font-size: 0.8rem;
   font-weight: 600;
   border-radius: 0.2rem;
+  cursor: pointer;
 }
 
 .checkout-btn {

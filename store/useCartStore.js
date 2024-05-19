@@ -6,12 +6,21 @@ export const useCartStore = defineStore("cart", {
       cart: [],
     };
   },
+  getters: {
+    getQuantityByID(state) {
+      return (id) =>
+        state.cart.find((element) => {
+          return element?.id === id;
+        })?.quantity;
+    },
+  },
+
   actions: {
     addToCart(id, quantity) {
       this.cart.push({ id, quantity });
     },
 
-    updateCartQuantity(id, quantity) {
+    incrementCartQuantity(id, quantity) {
       let index = this.cart.findIndex((element) => {
         return element?.id === id;
       });
@@ -22,6 +31,18 @@ export const useCartStore = defineStore("cart", {
         this.addToCart(id, quantity);
       }
     },
+    setCartQuantity(id, quantity) {
+      let index = this.cart.findIndex((element) => {
+        return element?.id === id;
+      });
+
+      if (index !== -1) {
+        this.cart[index].quantity = quantity;
+      } else {
+        this.addToCart(id, quantity);
+      }
+    },
+
     removeFromCart(id) {
       this.cart = this.cart.filter((element) => {
         return element?.id !== id;

@@ -13,6 +13,8 @@ const offset = ref(0);
 const max = ref(1000);
 const min = ref(0);
 
+const clear = ref(false);
+
 const {
   data: products,
   pending: products_loading,
@@ -33,7 +35,7 @@ const {
 );
 
 const product_list = computed(() => {
-  if (min_price.value && max_price.value)
+  if (max_price.value)
     return products.value?.filter((element) => {
       return (
         element.price >= min_price.value && element.price <= max_price.value
@@ -85,6 +87,7 @@ const updateOffset = (value) => {
 };
 
 const select_category = (item) => {
+  console.log(item.value);
   selected_category.value = item.value;
 };
 
@@ -105,6 +108,21 @@ watch(
 //     min.value = min_price.value = Math.min(...prices);
 //   }
 // });
+
+watch([max_price, min_price, selected_category], (map, mip, sc) => {
+  if (map || mip || sc?.length) {
+    clear.value = true;
+    console.log("changed", map, mip, sc?.value);
+  }
+});
+
+const clearFilter = () => {
+  max_price.value = 0;
+  min_price.value = 0;
+  selected_category.value = "";
+
+  clear.value = false;
+};
 </script>
 
 <template>
@@ -138,6 +156,14 @@ watch(
       <aside :class="filter_contoler ? 'filter-mobile' : 'filter'">
         <div>
           <div>
+            <div class="clear">
+              <button
+                type="button"
+                @click="clearFilter"
+                v-if="clear">
+                clear
+              </button>
+            </div>
             <h3 class="title-name">Category</h3>
 
             <button
@@ -158,7 +184,9 @@ watch(
                 <template #selectedOption="{ item }">
                   {{ item.value }}
                 </template>
-                <template #selectedValue="{ item }"> {{ item }} </template>
+                <template #selectedValue="{ item }">
+                  {{ clear ? item : "" }}
+                </template>
               </selectDropDown>
             </ClientOnly>
           </div>
@@ -418,6 +446,22 @@ watch(
   justify-content: center;
   align-items: center;
   font-size: large;
+}
+.clear {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.clear button {
+  font-size: small;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 1rem;
+  background-color: #ec807c;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 500px) {
