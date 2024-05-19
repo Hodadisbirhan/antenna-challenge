@@ -139,7 +139,7 @@ const lastThree = computed(() => {
 .list-container {
   display: flex;
   flex-direction: row;
-  gap: 5;
+  gap: 10px;
   align-items: center;
   justify-items: center;
 }

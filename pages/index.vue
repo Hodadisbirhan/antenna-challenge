@@ -1,37 +1,73 @@
 <script setup>
 import mulltiSlider from "multi-range-slider-vue";
 
-// const categories = ref(["shoes", "T-shirt", "cloth", "Jeans"]);
-const cat = ref("");
+const search_value = ref("");
+const selected_category = ref("");
+const max_price = ref(100);
+const min_price = ref(10);
 
 const limit = ref(10);
 
 const {
   data: products,
-  pending,
-  error,
-  refresh,
+  pending: products_loading,
+  error: product_error,
+  refresh: product_refetch,
 } = await useAsyncData(
   "products",
   () =>
     $fetch(
       `https://fakestoreapi.com/products${
-        cat.value ? "/category/" + cat.value : ""
+        selected_category.value ? "/category/" + selected_category.value : ""
       }${"?offset=" + limit.value}`
     ),
   {
-    watch: [cat],
+    watch: [selected_category],
+    lazy: true,
   }
 );
+
+const product_list = computed(() => {
+  if (min_price.value && max_price.value)
+    return products.value?.filter((element) => {
+      return (
+        element.price >= min_price.value && element.price <= max_price.value
+      );
+    });
+
+  return products;
+});
 
 const {
   data: categories,
   pending: catP,
   error: catE,
   refresh: catR,
-} = await useAsyncData("categories", () =>
-  $fetch("https://fakestoreapi.com/products/categories")
+} = await useAsyncData(
+  "categories",
+  () => $fetch("https://fakestoreapi.com/products/categories"),
+  {
+    lazy: true,
+  }
 );
+
+const list_category = computed(() => {
+  if (search_value.value)
+    return categories.value
+      ?.filter((element) => {
+        return element?.includes(search_value.value.toLowerCase());
+      })
+      .map((element) => {
+        return { value: element };
+      });
+  return categories.value?.map((element) => {
+    return { value: element };
+  });
+});
+
+const select_category = (item) => {
+  selected_category.value = item.value;
+};
 </script>
 
 <template>
@@ -39,42 +75,38 @@ const {
     <div class="banner"></div>
     <div class="page">
       <aside class="filter">
-        {{ cat }}
         <div>
           <h3 class="title-name">Category</h3>
-          <ul class="list-container">
-            <li
-              class="list"
-              v-for="category in categories"
-              :key="category">
-              <input
-                type="radio"
-                name="category"
-                :value="category"
-                :id="category"
-                v-model="cat" />
-              <label :for="category">{{ category }}</label>
-            </li>
-          </ul>
+          <div class="drop_down">
+            <selectDropDown
+              :data="list_category"
+              :withSearch="true"
+              v-model="search_value"
+              @click:item="select_category"
+              placeholder="Select Category">
+              <template #selectedOption="{ item }">
+                {{ item.value }}
+              </template>
+              <template #selectedValue="{ item }"> {{ item }} </template>
+            </selectDropDown>
+          </div>
+
           <div>
             <h3 class="title-name">Prices</h3>
             <mulltiSlider
               :max="100"
-              style="
-                background-color: white;
-                box-shadow: none;
-                border: none;
-              "></mulltiSlider>
+              :min="0"
+              style="background-color: white; box-shadow: none; border: none">
+            </mulltiSlider>
           </div>
         </div>
-        <slider></slider>
       </aside>
-
+      <span v-if="products_loading">loading</span>
       <main
         class="main"
-        v-if="products">
+        v-else="products">
         <product
-          v-for="product in products"
+          v-for="product in product_list"
           :key="product?.id"
           :id="product.id"
           :name="product?.title"
@@ -106,7 +138,7 @@ const {
   box-shadow: 0 0px 0.01rem rgba(0, 0, 0, 0.1);
   padding: 1rem;
   position: sticky;
-  top: 2rem;
+  top: 4rem;
   overflow-y: auto;
 }
 
@@ -129,20 +161,7 @@ const {
   gap: 2rem;
   width: 100%;
 }
-.list {
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-  gap: 0.3rem;
-  align-items: center;
-  color: rgb(112, 128, 144);
-}
-.list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.4rem;
-}
+
 .title-name {
   color: rgb(100 116 139);
   font-size: medium;
@@ -156,6 +175,11 @@ const {
   background-color: blueviolet;
   height: 10rem;
   margin-bottom: 1rem;
+}
+
+.drop_down {
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 @media only screen and (max-width: 300px) {
