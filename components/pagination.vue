@@ -10,11 +10,12 @@ const props = defineProps({
   },
   offset: {
     type: [Number],
-    default: 1,
+    default: 0,
   },
 });
 const emits = defineEmits(["updateOffset"]);
-const currentPage = ref(props.offset);
+const currentPage = ref(props.offset + 1);
+
 const styleDisabled = reactive({
   color: "rgb(203 213 225)",
 });
@@ -67,7 +68,9 @@ const lastThree = computed(() => {
 </script>
 
 <template>
-  <div class="wrapper">
+  <div
+    class="wrapper"
+    v-if="numberOfPages > 1">
     <div class="line"></div>
     <div class="inner-wrapper">
       <button

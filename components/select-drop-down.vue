@@ -134,7 +134,7 @@ const clickItem = (item) => {
   gap: 0.2rem;
   top: 110%;
   background-color: white;
-  z-index: 40;
+  z-index: 5;
   left: 0;
   width: 100%;
   box-shadow: 0 4px 1rem rgba(0, 0, 0, 0.1);

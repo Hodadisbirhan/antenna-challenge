@@ -26,6 +26,9 @@ dependencies:
   vue:
     specifier: ^3.4.27
     version: 3.4.27
+  vue-double-range-input:
+    specifier: ^0.1.6
+    version: 0.1.6
   vue-router:
     specifier: ^4.3.2
     version: 4.3.2(vue@3.4.27)
@@ -7116,6 +7119,14 @@ packages:
 
   /vue-devtools-stub@0.1.0:
     resolution: {integrity: sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==}
+    dev: false
+
+  /vue-double-range-input@0.1.6:
+    resolution: {integrity: sha512-SYsbPTrqcsVGKSYUAh8cAlfcV/aclDUmFtlrgfy0Yp504N5QuEATrBY2D4Abu2a8idbbioEekAjj4I5ppuHJvw==}
+    dependencies:
+      vue: 3.4.27
+    transitivePeerDependencies:
+      - typescript
     dev: false
 
   /vue-observe-visibility@2.0.0-alpha.1(vue@3.4.27):

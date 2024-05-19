@@ -1,6 +1,15 @@
 <script setup>
 useHead({
-  title: "Antenna-Challenge",
+  title: "antenna-challenge",
+  meta: [
+    { name: "description", content: "single Page e-commerce application" },
+  ],
+  link: [
+    {
+      rel: "icon",
+      href: "/e-comm.webp",
+    },
+  ],
 });
 </script>
 <template>

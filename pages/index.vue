@@ -1,12 +1,15 @@
 <script setup>
 import mulltiSlider from "multi-range-slider-vue";
+import "vue-double-range-input/dist/style.css";
+import VueDoubleRangeInput from "vue-double-range-input";
 
 const search_value = ref("");
 const selected_category = ref("");
 const max_price = ref(100);
 const min_price = ref(10);
-
-const limit = ref(10);
+const filter_contoler = ref(false);
+const limit = ref(5);
+const offset = ref(0);
 
 const {
   data: products,
@@ -19,7 +22,7 @@ const {
     $fetch(
       `https://fakestoreapi.com/products${
         selected_category.value ? "/category/" + selected_category.value : ""
-      }${"?offset=" + limit.value}`
+      }`
     ),
   {
     watch: [selected_category],
@@ -38,6 +41,12 @@ const product_list = computed(() => {
   return products;
 });
 
+const product_list_with_paginate = computed(() => {
+  return product_list.value?.slice(offset.value, offset.value + limit.value);
+});
+
+// for fetching the category
+
 const {
   data: categories,
   pending: catP,
@@ -51,6 +60,7 @@ const {
   }
 );
 
+// for filtering category with thier name
 const list_category = computed(() => {
   if (search_value.value)
     return categories.value
@@ -65,9 +75,20 @@ const list_category = computed(() => {
   });
 });
 
+const updateOffset = (value) => {
+  offset.value = value;
+};
+
 const select_category = (item) => {
   selected_category.value = item.value;
 };
+
+watch(
+  [selected_category, max_price, min_price, limit],
+  (sc, max_p, min_p, lim) => {
+    offset.value = 0;
+  }
+);
 </script>
 
 <template>
@@ -75,40 +96,83 @@ const select_category = (item) => {
     <div class="banner">
       <h3 class="">Enjoy This E-commerce</h3>
     </div>
+    <div class="filter-class">
+      <div
+        class="icon-container"
+        @click="filter_contoler = true">
+        <Icon
+          class="icon"
+          name="material-symbols-light:filter-alt-sharp">
+        </Icon>
+      </div>
+
+      <div class="data_per_page">
+        <label>Data per page</label>
+        <select v-model="limit">
+          <option
+            v-for="i in [5, 10, 15, 20]"
+            :key="i"
+            :value="i">
+            {{ i }}
+          </option>
+        </select>
+      </div>
+    </div>
     <div class="page">
-      <aside class="filter">
+      <aside :class="filter_contoler ? 'filter-mobile' : 'filter'">
         <div>
-          <h3 class="title-name">Category</h3>
+          <div>
+            <h3 class="title-name">Category</h3>
+
+            <button
+              class="x-btn"
+              @click="filter_contoler = false">
+              X
+            </button>
+          </div>
+
           <div class="drop_down">
-            <selectDropDown
-              :data="list_category"
-              :withSearch="true"
-              v-model="search_value"
-              @click:item="select_category"
-              placeholder="Select Category">
-              <template #selectedOption="{ item }">
-                {{ item.value }}
-              </template>
-              <template #selectedValue="{ item }"> {{ item }} </template>
-            </selectDropDown>
+            <ClientOnly>
+              <selectDropDown
+                :data="list_category"
+                :withSearch="true"
+                v-model="search_value"
+                @click:item="select_category"
+                placeholder="Select Category">
+                <template #selectedOption="{ item }">
+                  {{ item.value }}
+                </template>
+                <template #selectedValue="{ item }"> {{ item }} </template>
+              </selectDropDown>
+            </ClientOnly>
           </div>
 
           <div>
             <h3 class="title-name">Prices</h3>
-            <mulltiSlider
-              :max="100"
-              :min="0"
-              style="background-color: white; box-shadow: none; border: none">
-            </mulltiSlider>
+            <ClientOnly>
+              <VueDoubleRangeInput
+                :min="0"
+                :max="1000"
+                v-model:minValue="min_price"
+                v-model:maxValue="max_price"
+            /></ClientOnly>
           </div>
         </div>
       </aside>
-      <span v-if="products_loading">loading</span>
+      <span
+        v-if="products_loading"
+        class="main">
+        <div
+          v-for="i in 3"
+          :key="i">
+          <SkeletonLoading></SkeletonLoading>
+        </div>
+      </span>
       <main
         class="main"
         v-else="products">
         <product
-          v-for="product in product_list"
+          v-for="product in product_list_with_paginate"
           :key="product?.id"
           :id="product.id"
           :name="product?.title"
@@ -117,13 +181,17 @@ const select_category = (item) => {
           :price="product?.price"></product>
       </main>
     </div>
-    <pagination
-      :dataPerPage="5"
-      :totalData="50"></pagination>
+    <div class="paginate">
+      <pagination
+        @updateOffset="updateOffset"
+        :dataPerPage="limit"
+        :offset="offset"
+        :totalData="product_list?.length"></pagination>
+    </div>
   </div>
 </template>
 
-<style>
+<style scoped>
 .main {
   display: flex;
   flex-direction: column;
@@ -143,6 +211,20 @@ const select_category = (item) => {
   top: 4rem;
   overflow-y: auto;
 }
+.filter-mobile {
+  background-color: white;
+  max-height: calc(100vh-25rem);
+  min-width: 13rem;
+  height: 15rem;
+  border-radius: 0.2rem;
+  z-index: 4;
+  padding: 1rem;
+  position: absolute;
+  top: 0rem;
+  box-shadow: 0 4px 1rem rgba(0, 0, 0, 0.1);
+  left: 0.5rem;
+  overflow-y: auto;
+}
 
 .index-page {
   width: 100%;
@@ -156,6 +238,7 @@ const select_category = (item) => {
   justify-content: start;
   align-items: start;
   padding: 1rem;
+  position: relative;
 }
 .main {
   display: flex;
@@ -193,7 +276,77 @@ const select_category = (item) => {
   color: white;
 }
 
-@media only screen and (max-width: 300px) {
+.data_per_page {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+
+  justify-content: end;
+  align-items: center;
+}
+
+.filter-class {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 3rem;
+  padding-left: 1rem;
+}
+
+.data_per_page > label {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.data_per_page > select {
+  outline: none;
+  border: 0.08rem solid rgb(135, 97, 218);
+  border-radius: 0.2rem;
+  padding: 0.15rem 0.4rem;
+  background-color: whitesmoke;
+}
+
+.icon-container {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.2rem;
+  background-color: rgb(226, 216, 237);
+  cursor: pointer;
+}
+.icon-container .icon {
+  font-size: 2rem;
+  font-weight: 500;
+  color: rgb(135, 97, 218);
+}
+
+.x-btn {
+  font-size: medium;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 100%;
+  border: none;
+  border: 1px solid red;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  cursor: pointer;
+}
+
+.paginate {
+  width: 100%;
+  padding: 1rem;
+}
+
+@media only screen and (max-width: 500px) {
   .main {
     display: grid;
     grid-template-columns: auto !important;
@@ -207,7 +360,7 @@ const select_category = (item) => {
 @media only screen and (max-width: 600px) {
   .main {
     display: grid;
-    grid-template-columns: auto auto !important;
+    grid-template-columns: auto !important;
   }
 
   .filter {
@@ -244,6 +397,20 @@ const select_category = (item) => {
     display: grid;
     grid-template-columns: auto auto !important;
   }
+  .icon-container {
+    display: none;
+  }
+  .filter-class {
+    justify-content: end;
+  }
+  .filter-mobile {
+    position: sticky;
+    top: 4rem;
+    overflow-y: auto;
+  }
+  .x-btn {
+    display: none;
+  }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -251,6 +418,20 @@ const select_category = (item) => {
   .main {
     display: grid;
     grid-template-columns: auto auto auto auto;
+  }
+  .icon-container {
+    display: none;
+  }
+  .filter-class {
+    justify-content: end;
+  }
+  .filter-mobile {
+    position: sticky;
+    top: 4rem;
+    overflow-y: auto;
+  }
+  .x-btn {
+    display: none;
   }
 }
 </style>

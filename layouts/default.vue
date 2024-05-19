@@ -3,14 +3,18 @@
 <template>
   <div class="screen">
     <header class="header">
-      <b>Home</b>
+      <b>E-Antenna</b>
       <nav class="nav">
         <ul>
           <li>
             <NuxtLink to="/">Home</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/cart">cart</NuxtLink>
+            <NuxtLink to="/cart"
+              ><Icon
+                class="cart"
+                name="material-symbols:shopping-cart-checkout-sharp"></Icon
+            ></NuxtLink>
           </li>
         </ul>
       </nav>
@@ -30,21 +34,32 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem 3rem;
+  align-items: center;
+  padding: 1rem 2rem;
   position: fixed;
   top: 0;
   left: 0;
-
+  z-index: 10;
   height: 3rem;
   width: 100%;
-  background-color: aqua;
+  background-color: white;
 }
 .nav ul {
   display: flex;
   gap: 3rem;
+  align-items: center;
 }
 
 li {
   list-style: none;
+}
+a {
+  text-decoration: none;
+}
+
+.cart {
+  color: blueviolet;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 </style>

@@ -4,8 +4,12 @@ const {
   pending,
   error,
   refresh,
-} = await useAsyncData("carts", () =>
-  $fetch("https://fakestoreapi.com/products")
+} = await useAsyncData(
+  "carts",
+  () => $fetch("https://fakestoreapi.com/products"),
+  {
+    lazy: true,
+  }
 );
 </script>
 
@@ -98,6 +102,7 @@ const {
   align-items: start;
   gap: 1rem;
   margin: 3rem auto;
+  margin-top: 5rem;
 }
 .cart-section {
   display: flex;
