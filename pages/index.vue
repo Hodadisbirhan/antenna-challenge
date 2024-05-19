@@ -1,15 +1,17 @@
 <script setup>
-import mulltiSlider from "multi-range-slider-vue";
+//import mulltiSlider from "multi-range-slider-vue";
 import "vue-double-range-input/dist/style.css";
 import VueDoubleRangeInput from "vue-double-range-input";
 
 const search_value = ref("");
 const selected_category = ref("");
-const max_price = ref(100);
-const min_price = ref(10);
+const max_price = ref(1000);
+const min_price = ref(0);
 const filter_contoler = ref(false);
 const limit = ref(5);
 const offset = ref(0);
+const max = ref(1000);
+const min = ref(0);
 
 const {
   data: products,
@@ -38,11 +40,14 @@ const product_list = computed(() => {
       );
     });
 
-  return products;
+  return products.value;
 });
 
 const product_list_with_paginate = computed(() => {
-  return product_list.value?.slice(offset.value, offset.value + limit.value);
+  if (product_list.value?.length >= 1)
+    return product_list.value?.slice(offset.value, offset.value + limit.value);
+
+  return product_list.value;
 });
 
 // for fetching the category
@@ -89,6 +94,17 @@ watch(
     offset.value = 0;
   }
 );
+
+// watch(products, (value) => {
+//   if (value?.length && !max_price.value && !min_price.value) {
+//     const prices = value?.map((element) => {
+//       return element?.price;
+//     });
+
+//     max.value = max_price.value = Math.max([...prices]);
+//     min.value = min_price.value = Math.min(...prices);
+//   }
+// });
 </script>
 
 <template>
@@ -161,32 +177,48 @@ watch(
       </aside>
       <span
         v-if="products_loading"
-        class="main">
+        class="loading-parent">
         <div
           v-for="i in 3"
           :key="i">
           <SkeletonLoading></SkeletonLoading>
         </div>
       </span>
+
+      <div
+        v-else-if="product_error"
+        class="error-container">
+        <div class="error-icon">⚠️</div>
+        <div class="error-message">
+          <h2>Error</h2>
+          <p>Something went wrong. Please try again later.</p>
+        </div>
+      </div>
+
       <main
         class="main"
         v-else="products">
         <product
           v-for="product in product_list_with_paginate"
           :key="product?.id"
-          :id="product.id"
+          :id="product?.id"
           :name="product?.title"
-          :category="product?.category"
+          :category="product?.category | ''"
           :img_url="product?.image"
           :price="product?.price"></product>
       </main>
+    </div>
+    <div
+      v-if="product_list_with_paginate?.length < 1"
+      class="not-found">
+      <p>No Product Found</p>
     </div>
     <div class="paginate">
       <pagination
         @updateOffset="updateOffset"
         :dataPerPage="limit"
         :offset="offset"
-        :totalData="product_list?.length"></pagination>
+        :totalData="product_list?.length | 0"></pagination>
     </div>
   </div>
 </template>
@@ -344,6 +376,44 @@ watch(
 .paginate {
   width: 100%;
   padding: 1rem;
+}
+
+.loading-parent {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.error-container {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffe5e5;
+}
+
+.error-icon {
+  font-size: 50px;
+  margin-right: 20px;
+  color: #d9534f;
+}
+
+.error-message h2 {
+  margin: 0 0 10px 0;
+  color: #d9534f;
+}
+
+.error-message p {
+  margin: 0;
+  color: #333;
+}
+.not-found {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
 }
 
 @media only screen and (max-width: 500px) {

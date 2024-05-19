@@ -11,7 +11,7 @@
 
 <style scoped>
 .card {
-  width: 300px;
+  width: 250px;
   padding: 20px;
   background-color: white;
   border-radius: 8px;
