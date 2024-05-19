@@ -8,5 +8,8 @@
 <style>
 .screen {
   max-width: 1920px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 </style>

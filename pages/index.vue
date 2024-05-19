@@ -158,7 +158,7 @@ const {
   margin-bottom: 1rem;
 }
 
-@media only screen and (max-width: 200px) {
+@media only screen and (max-width: 300px) {
   .main {
     display: grid;
     grid-template-columns: auto !important;

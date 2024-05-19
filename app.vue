@@ -1,16 +1,18 @@
 <script setup>
 useHead({
-  title: "Antenna-Challeng",
+  title: "Antenna-Challenge",
 });
 </script>
 <template>
-  <div>
+  <div class="parent">
     <NuxtLayout>
       <NuxtPage></NuxtPage>
     </NuxtLayout>
   </div>
 </template>
 <style>
+*::after,
+*::before,
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +22,8 @@ useHead({
 }
 body {
   background-color: whitesmoke;
-  display: flex;
-  justify-items: center;
+}
+.parent {
+  width: 100%;
 }
 </style>
