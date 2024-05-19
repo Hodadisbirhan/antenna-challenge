@@ -11,13 +11,16 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.7.0",
+    "@pinia/nuxt": "^0.5.1",
     "@vueuse/components": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
-    "multi-range-slider-vue": "^1.1.4",
     "nuxt": "^3.11.2",
     "nuxt-icon": "^0.6.10",
     "vue": "^3.4.27",
     "vue-double-range-input": "^0.1.6",
     "vue-router": "^4.3.2"
+  },
+  "devDependencies": {
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0"
   }
 }

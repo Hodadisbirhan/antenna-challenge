@@ -1,4 +1,7 @@
-<script setup></script>
+<script setup>
+import { useCartStore } from "../store/useCartStore";
+const store = useCartStore();
+</script>
 
 <template>
   <div class="screen">
@@ -10,8 +13,13 @@
             <NuxtLink to="/">Home</NuxtLink>
           </li>
           <li>
-            <NuxtLink to="/cart"
-              ><Icon
+            <NuxtLink
+              to="/cart"
+              class="cart-wrapper">
+              <span class="cart-counter">
+                {{ store?.cart.length }}
+              </span>
+              <Icon
                 class="cart"
                 name="material-symbols:shopping-cart-checkout-sharp"></Icon
             ></NuxtLink>
@@ -22,7 +30,7 @@
     <slot></slot>
   </div>
 </template>
-<style>
+<style scoped>
 .screen {
   max-width: 1920px;
   width: 100%;
@@ -57,9 +65,30 @@ a {
   text-decoration: none;
 }
 
+.cart-wrapper {
+  position: relative;
+}
+.cart-counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  position: absolute;
+  top: -0.2rem;
+  right: -0.12rem;
+  color: blue;
+
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  background-color: rgb(218, 209, 227);
+}
 .cart {
-  color: blueviolet;
   font-size: 1.5rem;
   font-weight: 500;
+}
+.router-link-active {
+  color: blue; /* Example style for active link */
 }
 </style>

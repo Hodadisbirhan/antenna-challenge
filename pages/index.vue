@@ -175,6 +175,7 @@ watch(
           </div>
         </div>
       </aside>
+
       <span
         v-if="products_loading"
         class="loading-parent">
@@ -188,7 +189,9 @@ watch(
       <div
         v-else-if="product_error"
         class="error-container">
-        <div class="error-icon">⚠️</div>
+        <Icon
+          name="material-symbols-light:error-outline"
+          class="error-icon"></Icon>
         <div class="error-message">
           <h2>Error</h2>
           <p>Something went wrong. Please try again later.</p>
@@ -203,15 +206,16 @@ watch(
           :key="product?.id"
           :id="product?.id"
           :name="product?.title"
-          :category="product?.category | ''"
+          :category="product?.category"
           :img_url="product?.image"
-          :price="product?.price"></product>
+          :price="product?.price"
+          :rate="product?.rating?.rate"></product>
       </main>
     </div>
     <div
       v-if="product_list_with_paginate?.length < 1"
       class="not-found">
-      <p>No Product Found</p>
+      <p>Product Not Found</p>
     </div>
     <div class="paginate">
       <pagination
@@ -382,15 +386,15 @@ watch(
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  gap: 1rem;
 }
 
 .error-container {
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #ffe5e5;
 }
 
 .error-icon {

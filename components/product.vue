@@ -1,4 +1,6 @@
 <script setup>
+import { useCartStore } from "../store/useCartStore";
+
 const props = defineProps({
   id: { type: [String, Number] },
   name: {
@@ -16,7 +18,18 @@ const props = defineProps({
   price: {
     type: [Number, String],
   },
+  rate: {
+    type: [Number, String],
+  },
 });
+
+const store = useCartStore();
+
+const addToCart = (id) => {
+  store?.updateCartQuantity(id, 1);
+};
+
+console.log(store);
 </script>
 
 <template>
@@ -33,10 +46,22 @@ const props = defineProps({
         <h3 class="category">{{ category }}</h3>
         <p class="product-name">{{ name }}</p>
       </div>
-      <div class="card-bottom">
-        <b>${{ price }}</b>
+      <div class="rate-container">
+        <Icon
+          class="icon"
+          name="material-symbols:star-rounded"></Icon>
 
-        <button class="btn">Add To Cart</button>
+        <small>{{ rate }}</small>
+      </div>
+
+      <div class="card-bottom">
+        <span>${{ price }}</span>
+
+        <button
+          class="btn"
+          @click="addToCart(id)">
+          Add to cart
+        </button>
       </div>
     </div>
   </div>
@@ -101,17 +126,23 @@ const props = defineProps({
 }
 
 .btn {
-  padding: 0.4rem 0.5rem;
+  padding: 0.5rem 0.6rem;
   background-color: rgb(103, 103, 220);
   color: white;
   border: none;
-  font-size: small;
-  font-weight: 700;
+  font-size: 0.8rem;
+
+  font-weight: 500;
   border-radius: 0.3rem;
   cursor: pointer;
 }
+
+.btn:hover {
+  background-color: blue;
+}
+
 .category {
-  color: rgb(203 213 225);
+  color: rgb(156 163 175);
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: capitalize;
@@ -120,9 +151,33 @@ const props = defineProps({
 .product-name {
   width: 100%;
   word-break: break-all;
-  color: rgb(112, 128, 144);
+  color: rgb(55 65 81);
   font-size: 0.9rem;
   font-weight: 500;
-  text-justify: inter-ideograph;
+}
+.card-bottom span {
+  font-size: large;
+  font-weight: 600;
+}
+.rate-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.02rem;
+  justify-content: left;
+}
+.rate-container small {
+  font-size: smaller;
+  font-weight: 500;
+  color: rgb(156 163 175);
+}
+.rate-container .icon {
+  font-size: 1.2rem;
+  margin-left: -0.1rem;
+  color: yellowgreen;
+  padding: 0;
 }
 </style>
+~/store/useCartStore.js
