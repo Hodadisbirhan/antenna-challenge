@@ -27,6 +27,12 @@ const cart_products = computed(() => {
   });
 });
 
+const total_price = computed(() => {
+  return cart_products.value?.reduce((total, element) => {
+    return total + element?.price * store.getQuantityByID(element?.id);
+  }, 0);
+});
+
 const backHome = () => {
   router.push("/");
 };
@@ -36,10 +42,19 @@ const backHome = () => {
   <div class="wrapper-cart">
     <section class="cart-section">
       <h1>Shopping Cart</h1>
-
+      <p
+        v-if="error"
+        class="error">
+        Error Please Try Again
+      </p>
+      <p
+        v-else-if="is_loading"
+        class="loading">
+        Loading...
+      </p>
       <ul
         class="cart-list-wrapper"
-        v-if="products">
+        v-else-if="products">
         <li
           v-for="product in cart_products"
           :key="product.id">
@@ -51,6 +66,11 @@ const backHome = () => {
             :price="product?.price"></cart>
         </li>
       </ul>
+      <p
+        v-else-if="products?.length < 1"
+        class="not-found">
+        No Cart
+      </p>
     </section>
     <section class="checkout_coupen">
       <div class="coupen">
@@ -65,21 +85,21 @@ const backHome = () => {
       <div class="checkout">
         <div class="total-price">
           <span>Total Price</span>
-          <p>$545</p>
+          <p>${{ total_price }}</p>
         </div>
         <div class="total-price">
           <span>discount Price</span>
-          <p>-$545</p>
+          <p>-$5</p>
         </div>
         <div class="total-price">
           <span>Tax Price</span>
-          <p>$54</p>
+          <p>$10</p>
         </div>
 
         <hr />
         <div class="total-price">
           <span>Total Price</span>
-          <p>$545</p>
+          <p>${{ total_price + 5 }}</p>
         </div>
 
         <button class="checkout-btn">Check out</button>

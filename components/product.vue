@@ -1,6 +1,6 @@
 <script setup>
 import { useCartStore } from "../store/useCartStore";
-
+const router = useRouter();
 const props = defineProps({
   id: { type: [String, Number] },
   name: {
@@ -25,13 +25,19 @@ const props = defineProps({
 
 const store = useCartStore();
 
-const addToCart = (id) => {
-  store?.incrementCartQuantity(id, 1);
+const addToCart = () => {
+  store?.incrementCartQuantity(props.id, 1);
+};
+
+const toDetail = () => {
+  router.push({ name: "detail-id", params: { id: props.id } });
 };
 </script>
 
 <template>
-  <div class="card">
+  <div
+    class="card"
+    @click="toDetail">
     <div class="image-container">
       <NuxtImg
         class="img"
@@ -57,7 +63,7 @@ const addToCart = (id) => {
 
         <button
           class="btn"
-          @click="addToCart(id)">
+          @click.stop="addToCart(id)">
           Add to cart
         </button>
       </div>
@@ -83,6 +89,7 @@ const addToCart = (id) => {
 }
 .card:hover {
   box-shadow: 0 4px 1rem rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 .image-container {
   width: 100%;
@@ -177,5 +184,8 @@ const addToCart = (id) => {
   color: yellowgreen;
   padding: 0;
 }
+
+a {
+  text-decoration: none;
+}
 </style>
-~/store/useCartStore.js
