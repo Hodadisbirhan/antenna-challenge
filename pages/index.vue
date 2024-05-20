@@ -140,11 +140,11 @@ watch(
             </div>
             <h3 class="title-name">Category</h3>
 
-            <!-- <button
+            <button
               class="x-btn"
               @click="filter_contoler = false">
               X
-            </button> -->
+            </button>
           </div>
 
           <div class="drop_down">
