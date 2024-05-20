@@ -89,16 +89,17 @@ const toDetail = () => {
 
 <style scoped>
 .card {
-  min-width: 12rem;
-  min-height: 20rem;
+  max-width: 100%;
+  height: 100%;
   background-color: white;
   align-items: center;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 1rem;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
   box-shadow: 0 0px 0.01rem rgba(0, 0, 0, 0.1);
   transition-duration: 700ms;
   transition-property: all;
@@ -109,18 +110,26 @@ const toDetail = () => {
 }
 .image-container {
   width: 100%;
-  height: 60%;
+  height: 10rem;
   display: flex;
   justify-items: center;
   justify-content: center;
   padding: 0rem 0.1rem;
+  overflow: hidden;
 }
 .img {
   object-fit: contain;
   object-position: center;
   width: 100%;
-  height: 10rem;
+  height: 100%;
 }
+
+.card:hover .img {
+  scale: 1.2;
+  transition-property: all;
+  transition-duration: 1s;
+}
+
 .hline {
   width: 100%;
   opacity: 20%;
@@ -133,17 +142,19 @@ const toDetail = () => {
   width: 100%;
   gap: 0.5rem;
   padding: 0rem 1rem;
-  height: 100%;
+  height: 50%;
   flex-grow: 1;
 
-  justify-content: space-between;
+  justify-content: center;
 }
 .card-bottom {
+  width: 100%;
   display: flex;
+  align-self: ;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: auto;
 }
 
 .btn {

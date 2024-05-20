@@ -54,7 +54,7 @@ const backHome = () => {
       </p>
       <ul
         class="cart-list-wrapper"
-        v-else-if="products">
+        v-else-if="products.length">
         <li
           v-for="product in cart_products"
           :key="product.id">
@@ -67,9 +67,9 @@ const backHome = () => {
         </li>
       </ul>
       <p
-        v-else-if="products?.length < 1"
+        v-if="cart_products?.length < 1"
         class="not-found">
-        No Cart
+        No Cart Data
       </p>
     </section>
     <section class="checkout_coupen">
@@ -239,5 +239,11 @@ const backHome = () => {
 .back-to-btn {
   border: 0.1rem solid rgb(135, 97, 218);
   color: rgb(135, 97, 218);
+}
+
+@media only screen and (max-width: 600px) {
+  .checkout_coupen {
+    width: 100%;
+  }
 }
 </style>

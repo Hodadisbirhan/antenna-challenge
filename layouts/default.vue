@@ -36,6 +36,7 @@ const store = useCartStore();
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-left: auto;
 }
 
 .header {

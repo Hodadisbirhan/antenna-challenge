@@ -206,7 +206,7 @@ const clearFilter = () => {
 
       <span
         v-if="products_loading"
-        class="loading-parent">
+        class="main">
         <div
           v-for="i in 3"
           :key="i">
@@ -305,8 +305,8 @@ const clearFilter = () => {
   position: relative;
 }
 .main {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+
   gap: 2rem;
   width: 100%;
 }
@@ -321,8 +321,11 @@ const clearFilter = () => {
 .banner {
   display: flex;
   max-width: 1920px;
-  background-color: blueviolet;
-  height: 10rem;
+  background-image: url("/banner.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 14rem;
   margin-bottom: 1rem;
   margin-top: 3rem;
   justify-content: center;
@@ -464,10 +467,10 @@ const clearFilter = () => {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   .main {
     display: grid;
-    grid-template-columns: auto !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .filter {
@@ -478,7 +481,7 @@ const clearFilter = () => {
 @media only screen and (max-width: 600px) {
   .main {
     display: grid;
-    grid-template-columns: auto !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .filter {
@@ -490,7 +493,7 @@ const clearFilter = () => {
 @media only screen and (min-width: 601px) and (max-width: 768px) {
   .main {
     display: grid;
-    grid-template-columns: auto auto !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
   .filter {
@@ -502,7 +505,7 @@ const clearFilter = () => {
 @media only screen and (min-width: 769px) and (max-width: 992px) {
   .main {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
   .filter {
     display: none;
@@ -513,7 +516,7 @@ const clearFilter = () => {
 @media only screen and (min-width: 993px) and (max-width: 1200px) {
   .main {
     display: grid;
-    grid-template-columns: auto auto !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
   .icon-container {
     display: none;
@@ -535,7 +538,7 @@ const clearFilter = () => {
 @media only screen and (min-width: 1201px) {
   .main {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
   .icon-container {
     display: none;
