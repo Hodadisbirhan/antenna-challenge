@@ -1,5 +1,5 @@
 <script setup>
-import { useCartStore } from "../store/useCartStore";
+import { useCartStore } from "~/store/useCartStore";
 const router = useRouter();
 const props = defineProps({
   id: { type: [String, Number] },
@@ -24,9 +24,17 @@ const props = defineProps({
 });
 
 const store = useCartStore();
+const message = ref("");
+const show = ref(false);
 
 const addToCart = () => {
   store?.incrementCartQuantity(props.id, 1);
+  message.value = "successfully added to cart";
+  show.value = true;
+};
+
+const updateShow = (value) => {
+  show.value = value;
 };
 
 const toDetail = () => {
@@ -38,6 +46,14 @@ const toDetail = () => {
   <div
     class="card"
     @click="toDetail">
+    <div>
+      <Notification
+        @update:show="updateShow"
+        :show="show"
+        ><template #content>{{ message }}</template></Notification
+      >
+    </div>
+
     <div class="image-container">
       <NuxtImg
         class="img"

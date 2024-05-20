@@ -43,7 +43,7 @@ const backHome = () => {
     <section class="cart-section">
       <h1>Shopping Cart</h1>
       <p
-        v-if="error"
+        v-if="is_error"
         class="error">
         Error Please Try Again
       </p>

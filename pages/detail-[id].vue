@@ -3,7 +3,8 @@ import { useCartStore } from "~/store/useCartStore";
 
 const store = useCartStore();
 const route = useRoute();
-
+const message = ref("");
+const show = ref(false);
 const {
   data: product,
   pending: is_loading,
@@ -16,13 +17,23 @@ const {
 );
 
 const addToCart = () => {
-  console.log(route.params?.id);
   store.incrementCartQuantity(Number(route.params?.id), 1);
+  message.value = "successfully added to cart";
+  show.value = true;
+};
+
+const updateShow = (value) => {
+  show.value = value;
 };
 </script>
 
 <template>
-  <div>
+  <div class="detail-parent">
+    <Notification
+      @update:show="updateShow"
+      :show="show"
+      ><template #content>{{ message }}</template></Notification
+    >
     <p v-if="is_loading">Loading...</p>
     <p v-else-if="is_error">Error Please Try again</p>
     <div
@@ -63,9 +74,13 @@ const addToCart = () => {
   </div>
 </template>
 <style scoped>
+.detail-parent {
+  margin: 5rem auto;
+}
+
 .container {
   max-width: 1920px;
-  margin: 5rem auto;
+
   display: flex;
   flex-wrap: wrap;
 }
