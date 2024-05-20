@@ -10,8 +10,6 @@ const min_price = ref(0);
 const filter_contoler = ref(false);
 const limit = ref(5);
 const offset = ref(0);
-const max = ref(1000);
-const min = ref(0);
 
 const clear = ref(false);
 

@@ -2,6 +2,7 @@
 import { useCartStore } from "~/store/useCartStore";
 const router = useRouter();
 const store = useCartStore();
+
 const {
   data: products,
   pending: is_loading,
@@ -27,6 +28,7 @@ const cart_products = computed(() => {
   });
 });
 
+// for calculating the total price of the product in cart
 const total_price = computed(() => {
   return cart_products.value?.reduce((total, element) => {
     return total + element?.price * store.getQuantityByID(element?.id);

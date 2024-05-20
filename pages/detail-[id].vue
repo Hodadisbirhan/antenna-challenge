@@ -74,6 +74,7 @@ const updateShow = (value) => {
     </div>
   </div>
 </template>
+
 <style scoped>
 .detail-parent {
   margin: 5rem auto;
