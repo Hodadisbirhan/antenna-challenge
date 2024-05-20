@@ -64,6 +64,8 @@ li {
 }
 a {
   text-decoration: none;
+  font-size: small;
+  font-weight: 400;
 }
 
 .cart-wrapper {
@@ -76,7 +78,7 @@ a {
   font-size: 0.8rem;
   font-weight: 500;
   position: absolute;
-  top: -0.2rem;
+  top: -0.27rem;
   right: -0.12rem;
   color: blue;
 
@@ -90,6 +92,9 @@ a {
   font-weight: 500;
 }
 .router-link-active {
-  color: blue; /* Example style for active link */
+  color: blue;
+}
+a:active {
+  color: blueviolet;
 }
 </style>

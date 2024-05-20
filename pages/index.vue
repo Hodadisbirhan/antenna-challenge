@@ -93,36 +93,10 @@ const select_category = (item) => {
 
 watch(
   [selected_category, max_price, min_price, limit],
-  (sc, max_p, min_p, lim) => {
+  ([sc, max_p, min_p, lim]) => {
     offset.value = 0;
   }
 );
-
-// watch(products, (value) => {
-//   if (value?.length && !max_price.value && !min_price.value) {
-//     const prices = value?.map((element) => {
-//       return element?.price;
-//     });
-
-//     max.value = max_price.value = Math.max([...prices]);
-//     min.value = min_price.value = Math.min(...prices);
-//   }
-// });
-
-watch([max_price, min_price, selected_category], (map, mip, sc) => {
-  if (map || mip || sc?.length) {
-    clear.value = true;
-    console.log("changed", map, mip, sc?.value);
-  }
-});
-
-const clearFilter = () => {
-  max_price.value = 0;
-  min_price.value = 0;
-  selected_category.value = "";
-
-  clear.value = false;
-};
 </script>
 
 <template>
@@ -166,11 +140,11 @@ const clearFilter = () => {
             </div>
             <h3 class="title-name">Category</h3>
 
-            <button
+            <!-- <button
               class="x-btn"
               @click="filter_contoler = false">
               X
-            </button>
+            </button> -->
           </div>
 
           <div class="drop_down">
@@ -185,7 +159,7 @@ const clearFilter = () => {
                   {{ item.value }}
                 </template>
                 <template #selectedValue="{ item }">
-                  {{ clear ? item : "" }}
+                  {{ item }}
                 </template>
               </selectDropDown>
             </ClientOnly>
@@ -197,6 +171,9 @@ const clearFilter = () => {
               <VueDoubleRangeInput
                 :min="0"
                 :max="1000"
+                track-height="4px"
+                handler-width="18px"
+                handler-height="18px"
                 v-model:minValue="min_price"
                 v-model:maxValue="max_price"
             /></ClientOnly>

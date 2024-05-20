@@ -67,7 +67,7 @@ const backHome = () => {
         </li>
       </ul>
       <p
-        v-if="cart_products?.length < 1"
+        v-if="!is_error && !is_loading && cart_products?.length < 1"
         class="not-found">
         No Cart Data
       </p>
