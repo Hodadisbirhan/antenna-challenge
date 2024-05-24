@@ -89,7 +89,7 @@ const toDetail = () => {
 
 <style scoped>
 .card {
-  max-width: 100%;
+  max-width: 330px;
   height: 100%;
   background-color: white;
   align-items: center;
